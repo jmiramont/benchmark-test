@@ -440,8 +440,20 @@ of all methods for all noise conditions.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="benchmark_demo.ResultsInterpreter.ResultsInterpreter.save_csv_files">
-<span class="sig-name descname"><span class="pre">save_csv_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/ResultsInterpreter.html#ResultsInterpreter.save_csv_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.ResultsInterpreter.ResultsInterpreter.save_csv_files" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">save_csv_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/ResultsInterpreter.html#ResultsInterpreter.save_csv_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.ResultsInterpreter.ResultsInterpreter.save_csv_files" title="Permalink to this definition"></a></dt>
+<dd><p>Save results in .csv files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to file. Defaults to None.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the file was saved.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="benchmark_demo.ResultsInterpreter.ResultsInterpreter.save_report">
@@ -1072,6 +1084,16 @@ previous tone.</p>
 </section>
 <section id="module-benchmark_demo.utilstf">
 <span id="benchmark-demo-utilstf-module"></span><h2>benchmark_demo.utilstf module<a class="headerlink" href="#module-benchmark_demo.utilstf" title="Permalink to this headline"></a></h2>
+<p>This file contains a number of utilities for time-frequency analysis.
+Some functions has been modified from the supplementary code of:
+Bardenet, R., Flamant, J., &amp; Chainais, P. (2020). “On the zeros of the spectrogram of
+white noise.” Applied and Computational Harmonic Analysis, 48(2), 682-705.
+which can be found in.
+Those functions are:
+- getSpectrogram(signal)
+- findCenterEmptyBalls(Sww, pos_exp, radi_seg=1)
+- getConvexHull(Sww, pos_exp, empty_mask, radi_expand=0.5)
+- reconstructionSignal(hull_d, stft)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="benchmark_demo.utilstf.add_snr">
 <span class="sig-prename descclassname"><span class="pre">benchmark_demo.utilstf.</span></span><span class="sig-name descname"><span class="pre">add_snr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/utilstf.html#add_snr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.utilstf.add_snr" title="Permalink to this definition"></a></dt>
@@ -1082,7 +1104,9 @@ SNR is defined as SNR (dB) = 10 * log10(Ex/En)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="benchmark_demo.utilstf.add_snr_block">
 <span class="sig-prename descclassname"><span class="pre">benchmark_demo.utilstf.</span></span><span class="sig-name descname"><span class="pre">add_snr_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/utilstf.html#add_snr_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.utilstf.add_snr_block" title="Permalink to this definition"></a></dt>
-<dd><p>Adds noise to a signal x with SNR equal to snr. SNR is defined as SNR (dB) = 10 * log10(Ex/En)</p>
+<dd><p>Adds noise to a signal x with SNR equal to snr.
+SNR is defined as SNR (dB) = 10 * log10(Ex/En), where Ex and En are the energy of
+the signal and the noise, respectively.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1094,17 +1118,63 @@ SNR is defined as SNR (dB) = 10 * log10(Ex/En)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="benchmark_demo.utilstf.find_zeros_of_spectrogram">
 <span class="sig-prename descclassname"><span class="pre">benchmark_demo.utilstf.</span></span><span class="sig-name descname"><span class="pre">find_zeros_of_spectrogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/utilstf.html#find_zeros_of_spectrogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.utilstf.find_zeros_of_spectrogram" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Find the zeros of the spectrogram by searching for minima in a 3x3 submatrix of
+the spectrogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>S</strong> (<em>ndarray</em>) – The spectrogram of a signal.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Mx2 array where each row contains the coordinates of a zero of
+the spectrogram.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pos(ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="benchmark_demo.utilstf.get_round_window">
 <span class="sig-prename descclassname"><span class="pre">benchmark_demo.utilstf.</span></span><span class="sig-name descname"><span class="pre">get_round_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Nfft</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/utilstf.html#get_round_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.utilstf.get_round_window" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Generates a round Gaussian window, i.e. same essential support in time and
+frequency:</p>
+<blockquote>
+<div><p>g(n) = exp(-pi*(n/T)^2)</p>
+</div></blockquote>
+<p>for computing the Short-Time Fourier Transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Nfft</strong> – Number of samples of the desired fft.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A round Gaussian window.
+T (float): The scale of the Gaussian window (T = sqrt(Nfft))</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>g (ndarray)</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="benchmark_demo.utilstf.get_spectrogram">
 <span class="sig-prename descclassname"><span class="pre">benchmark_demo.utilstf.</span></span><span class="sig-name descname"><span class="pre">get_spectrogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/utilstf.html#get_spectrogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.utilstf.get_spectrogram" title="Permalink to this definition"></a></dt>
-<dd><p>Get the round spectrogram of the signal</p>
+<dd><p>Get the round spectrogram of the signal computed with a given window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>signal</strong> (<em>ndarray</em>) – A vector with the signal to analyse.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Spectrogram of the signal.
+stft: Short-time Fourier transform of the signal.
+stft_padded: Short-time Fourier transform of the padded signal.
+Npad: Number of zeros added in the zero-padding process.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>S(ndarray)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -1112,29 +1182,100 @@ SNR is defined as SNR (dB) = 10 * log10(Ex/En)</p>
 <span class="sig-prename descclassname"><span class="pre">benchmark_demo.utilstf.</span></span><span class="sig-name descname"><span class="pre">get_stft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/utilstf.html#get_stft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.utilstf.get_stft" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the STFT of the signal. Signal is padded with zeros.
 The outputs corresponds to the STFT with the regular size and also the
-zero padded version.</p>
+zero padded version. The signal is zero padded to alleviate border effects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>ndarray</em>) – The signal to analyse.</p></li>
+<li><p><strong>window</strong> (<em>ndarray</em><em>, </em><em>optional</em>) – The window to use. If None, uses a rounded Gaussian</p></li>
+<li><p><strong>None.</strong> (<em>window. Defaults to</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns de stft of the signal.
+stft_padded(ndarray): Returns the stft of the zero-padded signal.
+Npad(int): Number of zeros padded on each side of the signal.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>stft(ndarray)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="benchmark_demo.utilstf.hermite_fun">
 <span class="sig-prename descclassname"><span class="pre">benchmark_demo.utilstf.</span></span><span class="sig-name descname"><span class="pre">hermite_fun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/utilstf.html#hermite_fun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.utilstf.hermite_fun" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Computes an Hermite function of order q, that consist in a centered Hermite
+polynomial multiplied by the squared-root of a centered Gaussian given by:
+exp(-pi(t/T)^2). The parameter T fixes the width of the Gaussian function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>int</em>) – Length of the function in samples</p></li>
+<li><p><strong>q</strong> (<em>int</em>) – Order of the Hermite polynomial.</p></li>
+<li><p><strong>t</strong> (<em>ndarray</em>) – Values on which compute the function. If None, uses a centered</p></li>
+<li><p><strong>None.</strong> (<em>vector from -N//2 to N//2-1. Defaults to</em>) – </p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Scale of the Gaussian involved in the Hermite function. If None,</p></li>
+<li><p><strong>sqrt</strong> (<em>N =</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="benchmark_demo.utilstf.hermite_poly">
 <span class="sig-prename descclassname"><span class="pre">benchmark_demo.utilstf.</span></span><span class="sig-name descname"><span class="pre">hermite_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/utilstf.html#hermite_poly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.utilstf.hermite_poly" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Generates a Hermite polynomial of order n on the vector t.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>ndarray</em><em>, </em><em>float</em>) – A real valued vector on which compute the Hermite</p></li>
+<li><p><strong>polynomials.</strong> – </p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Order of the Hermite polynomial.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns an array with the Hermite polynomial computed on t.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="benchmark_demo.utilstf.reconstruct_signal">
 <span class="sig-prename descclassname"><span class="pre">benchmark_demo.utilstf.</span></span><span class="sig-name descname"><span class="pre">reconstruct_signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hull_d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stft</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/utilstf.html#reconstruct_signal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.utilstf.reconstruct_signal" title="Permalink to this definition"></a></dt>
-<dd><p>Reconstruction using the convex hull</p>
+<dd><p>Reconstruction using the convex hull.
+This function is deprecated and conserved for retrocompatibility purposes only.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="benchmark_demo.utilstf.reconstruct_signal_2">
 <span class="sig-prename descclassname"><span class="pre">benchmark_demo.utilstf.</span></span><span class="sig-name descname"><span class="pre">reconstruct_signal_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Npad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nfft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/benchmark_demo/utilstf.html#reconstruct_signal_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#benchmark_demo.utilstf.reconstruct_signal_2" title="Permalink to this definition"></a></dt>
 <dd><p>Reconstruction using a mask given as parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>stft</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>Npad</strong> (<em>_type_</em>) – _description_</p></li>
+<li><p><strong>Nfft</strong> (<em>_type_</em><em>, </em><em>optional</em>) – _description_. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_description_</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>_type_</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

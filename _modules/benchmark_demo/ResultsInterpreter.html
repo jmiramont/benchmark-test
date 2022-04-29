@@ -394,20 +394,31 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="s1">&#39;small&#39;</span><span class="p">)</span>
             <span class="c1"># sns.despine(offset=10, trim=True)</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
-
+            
             <span class="k">if</span> <span class="n">savetofile</span><span class="p">:</span>
                 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;results/figures/plot_&#39;</span><span class="o">+</span> <span class="n">signal_id</span> <span class="o">+</span><span class="s1">&#39;.pdf&#39;</span><span class="p">,</span><span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span><span class="c1"># , format=&#39;svg&#39;)</span>
             
         <span class="k">return</span> <span class="n">fig</span></div>
 
-<div class="viewcode-block" id="ResultsInterpreter.save_csv_files"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.ResultsInterpreter.ResultsInterpreter.save_csv_files">[docs]</a>    <span class="k">def</span> <span class="nf">save_csv_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-            <span class="n">df1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_benchmark_as_data_frame</span><span class="p">()</span>
-            <span class="n">df2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rearrange_data_frame</span><span class="p">()</span>
+<div class="viewcode-block" id="ResultsInterpreter.save_csv_files"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.ResultsInterpreter.ResultsInterpreter.save_csv_files">[docs]</a>    <span class="k">def</span> <span class="nf">save_csv_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Save results in .csv files.</span>
 
-            <span class="n">df1</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-            <span class="n">df2</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<span class="sd">        Args:</span>
+<span class="sd">            filepath (str, optional): Path to file. Defaults to None.</span>
 
-            <span class="k">return</span> <span class="kc">True</span></div>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the file was saved.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">df1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_benchmark_as_data_frame</span><span class="p">()</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rearrange_data_frame</span><span class="p">()</span>
+
+        <span class="n">filename1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span><span class="s1">&#39;denoising_results_raw.csv&#39;</span><span class="p">)</span>
+        <span class="n">filename2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span><span class="s1">&#39;denoising_results_rearranged.csv&#39;</span><span class="p">)</span>
+        <span class="n">df1</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename1</span><span class="p">)</span>
+        <span class="n">df2</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="ResultsInterpreter.rank_the_methods"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.ResultsInterpreter.ResultsInterpreter.rank_the_methods">[docs]</a>    <span class="k">def</span> <span class="nf">rank_the_methods</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">True</span></div></div>

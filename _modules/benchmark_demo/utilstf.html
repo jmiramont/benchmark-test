@@ -64,16 +64,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for benchmark_demo.utilstf</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.signal</span> <span class="k">as</span> <span class="nn">sg</span>
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">factorial</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span> <span class="k">as</span> <span class="n">pi</span>
-<span class="sd">&quot;&quot;&quot; This file contains a number of utilities for time-frequency analysis.</span>
-<span class="sd">Some functions has been modified from the supplementary code of:</span>
-<span class="sd">Bardenet, R., Flamant, J., &amp; Chainais, P. (2020). On the zeros of the spectrogram of white noise.</span>
-<span class="sd">Applied and Computational Harmonic Analysis, 48(2), 682-705.</span>
-<span class="sd">which can be found in: http://github.com/jflamant/2018-zeros-spectrogram-white-noise.</span>
-
+<span></span><span class="sd">&quot;&quot;&quot; This file contains a number of utilities for time-frequency analysis.</span>
+<span class="sd">Some functions has been modified from the supplementary code of: </span>
+<span class="sd">Bardenet, R., Flamant, J., &amp; Chainais, P. (2020). &quot;On the zeros of the spectrogram of </span>
+<span class="sd">white noise.&quot; Applied and Computational Harmonic Analysis, 48(2), 682-705.</span>
+<span class="sd">which can be found in.</span>
 <span class="sd">Those functions are:</span>
 <span class="sd">- getSpectrogram(signal)</span>
 <span class="sd">- findCenterEmptyBalls(Sww, pos_exp, radi_seg=1)</span>
@@ -82,7 +77,25 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span> <span class="k">as</span> <span class="nn">sg</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">factorial</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span> <span class="k">as</span> <span class="n">pi</span>
+
 <div class="viewcode-block" id="get_round_window"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.utilstf.get_round_window">[docs]</a><span class="k">def</span> <span class="nf">get_round_window</span><span class="p">(</span><span class="n">Nfft</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Generates a round Gaussian window, i.e. same essential support in time and </span>
+<span class="sd">    frequency: </span>
+<span class="sd">                g(n) = exp(-pi*(n/T)^2)</span>
+<span class="sd">    for computing the Short-Time Fourier Transform.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        Nfft: Number of samples of the desired fft.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        g (ndarray): A round Gaussian window.</span>
+<span class="sd">        T (float): The scale of the Gaussian window (T = sqrt(Nfft))</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="c1"># analysis window</span>
     <span class="n">g</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">Nfft</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">Nfft</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
     <span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">g</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
@@ -93,8 +106,17 @@
 <div class="viewcode-block" id="get_stft"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.utilstf.get_stft">[docs]</a><span class="k">def</span> <span class="nf">get_stft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">window</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Compute the STFT of the signal. Signal is padded with zeros.</span>
 <span class="sd">    The outputs corresponds to the STFT with the regular size and also the</span>
-<span class="sd">    zero padded version.</span>
+<span class="sd">    zero padded version. The signal is zero padded to alleviate border effects.</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        signal (ndarray): The signal to analyse.</span>
+<span class="sd">        window (ndarray, optional): The window to use. If None, uses a rounded Gaussian</span>
+<span class="sd">        window. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        stft(ndarray): Returns de stft of the signal.</span>
+<span class="sd">        stft_padded(ndarray): Returns the stft of the zero-padded signal.</span>
+<span class="sd">        Npad(int): Number of zeros padded on each side of the signal.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -114,7 +136,16 @@
 
 <div class="viewcode-block" id="get_spectrogram"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.utilstf.get_spectrogram">[docs]</a><span class="k">def</span> <span class="nf">get_spectrogram</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span><span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the round spectrogram of the signal </span>
+<span class="sd">    Get the round spectrogram of the signal computed with a given window. </span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        signal(ndarray): A vector with the signal to analyse.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        S(ndarray): Spectrogram of the signal.</span>
+<span class="sd">        stft: Short-time Fourier transform of the signal.</span>
+<span class="sd">        stft_padded: Short-time Fourier transform of the padded signal.</span>
+<span class="sd">        Npad: Number of zeros added in the zero-padding process.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">window</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -127,6 +158,16 @@
 
 
 <div class="viewcode-block" id="find_zeros_of_spectrogram"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.utilstf.find_zeros_of_spectrogram">[docs]</a><span class="k">def</span> <span class="nf">find_zeros_of_spectrogram</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Find the zeros of the spectrogram by searching for minima in a 3x3 submatrix of</span>
+<span class="sd">    the spectrogram.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        S (ndarray): The spectrogram of a signal. </span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pos(ndarray): A Mx2 array where each row contains the coordinates of a zero of </span>
+<span class="sd">        the spectrogram.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># detection of zeros of the spectrogram</span>
     <span class="n">th</span> <span class="o">=</span> <span class="mf">1e-14</span>
     <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">extr2minth</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">th</span><span class="p">)</span> <span class="c1"># Find zero&#39;s coordinates</span>
@@ -138,7 +179,9 @@
 
 
 <div class="viewcode-block" id="reconstruct_signal"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.utilstf.reconstruct_signal">[docs]</a><span class="k">def</span> <span class="nf">reconstruct_signal</span><span class="p">(</span><span class="n">hull_d</span><span class="p">,</span> <span class="n">stft</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Reconstruction using the convex hull</span>
+    <span class="sd">&quot;&quot;&quot;Reconstruction using the convex hull.</span>
+<span class="sd">    This function is deprecated and conserved for retrocompatibility purposes only.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Nfft</span> <span class="o">=</span> <span class="n">stft</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">tmin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nfft</span><span class="p">))</span>
@@ -167,7 +210,16 @@
 
 
 <div class="viewcode-block" id="reconstruct_signal_2"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.utilstf.reconstruct_signal_2">[docs]</a><span class="k">def</span> <span class="nf">reconstruct_signal_2</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">stft</span><span class="p">,</span> <span class="n">Npad</span><span class="p">,</span> <span class="n">Nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Reconstruction using a mask given as parameter</span>
+    <span class="sd">&quot;&quot;&quot;Reconstruction using a mask given as parameter</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mask (_type_): _description_</span>
+<span class="sd">        stft (_type_): _description_</span>
+<span class="sd">        Npad (_type_): _description_</span>
+<span class="sd">        Nfft (_type_, optional): _description_. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        _type_: _description_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Ni</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">Nfft</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -205,7 +257,10 @@
 
 <div class="viewcode-block" id="add_snr_block"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.utilstf.add_snr_block">[docs]</a><span class="k">def</span> <span class="nf">add_snr_block</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">snr</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Adds noise to a signal x with SNR equal to snr. SNR is defined as SNR (dB) = 10 * log10(Ex/En)</span>
+<span class="sd">    Adds noise to a signal x with SNR equal to snr.</span>
+<span class="sd">    SNR is defined as SNR (dB) = 10 * log10(Ex/En), where Ex and En are the energy of </span>
+<span class="sd">    the signal and the noise, respectively.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -252,6 +307,17 @@
 
 
 <div class="viewcode-block" id="hermite_poly"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.utilstf.hermite_poly">[docs]</a><span class="k">def</span> <span class="nf">hermite_poly</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generates a Hermite polynomial of order n on the vector t.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        t (ndarray, float): A real valued vector on which compute the Hermite </span>
+<span class="sd">        polynomials.</span>
+<span class="sd">        n (int): Order of the Hermite polynomial.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ndarray: Returns an array with the Hermite polynomial computed on t.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">),))</span>
     <span class="k">else</span><span class="p">:</span>
@@ -262,6 +328,21 @@
 
 
 <div class="viewcode-block" id="hermite_fun"><a class="viewcode-back" href="../../benchmark_demo.html#benchmark_demo.utilstf.hermite_fun">[docs]</a><span class="k">def</span> <span class="nf">hermite_fun</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Computes an Hermite function of order q, that consist in a centered Hermite </span>
+<span class="sd">    polynomial multiplied by the squared-root of a centered Gaussian given by: </span>
+<span class="sd">    exp(-pi(t/T)^2). The parameter T fixes the width of the Gaussian function.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        N (int): Length of the function in samples</span>
+<span class="sd">        q (int): Order of the Hermite polynomial.</span>
+<span class="sd">        t (ndarray): Values on which compute the function. If None, uses a centered </span>
+<span class="sd">        vector from -N//2 to N//2-1. Defaults to None.</span>
+<span class="sd">        T (float): Scale of the Gaussian involved in the Hermite function. If None,</span>
+<span class="sd">        N = sqrt(N). Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        _type_: _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">-</span><span class="n">N</span><span class="o">//</span><span class="mi">2</span>
 
@@ -272,7 +353,6 @@
     <span class="c1"># gaussian_basic /= np.sum(gaussian_basic)</span>
     <span class="n">h_func</span> <span class="o">=</span> <span class="n">gaussian_basic</span><span class="o">*</span><span class="n">hermite_poly</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="o">/</span><span class="n">T</span><span class="p">,</span> <span class="n">q</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">factorial</span><span class="p">(</span><span class="n">q</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">q</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">h_func</span></div>
-
 
 
 <span class="c1"># def empty_balls(signal, radi_seg = 1):</span>
